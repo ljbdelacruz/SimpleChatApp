@@ -24,7 +24,23 @@ class DashboardViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     @IBAction func CreateOnClick(_ sender: Any) {
-        
+        var roomNameTF:UITextField?;
+        let uialert=UIAlertController(title: "Add Room", message: "", preferredStyle: .alert)
+        uialert.addTextField(configurationHandler: {
+            (tf) in
+            tf.placeholder="Room Name";
+            roomNameTF=tf;
+        })
+        let addAction=UIAlertAction(title: "Add", style: .default, handler: {
+            (action) in
+            //action invoked when user added new item button
+        })
+        let cancelAction=UIAlertAction(title: "Cancel", style: .default, handler: {
+            (action) in
+        })
+        uialert.addAction(addAction);
+        uialert.addAction(cancelAction);
+        present(uialert, animated: true, completion: nil)
     }
 }
 
