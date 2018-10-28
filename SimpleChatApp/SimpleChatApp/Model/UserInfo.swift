@@ -25,11 +25,8 @@ class UserInfo{
     func NewUser(completionHandler: @escaping (Any?, Error?) -> ()){
         FirebaseCustom.createUser(email: self.Email, password: self.Password, completionHandler: {
             (res, err) in
-            if err == nil{
-                UserInfo.NewUserInfo(email: self.Email, name: self.Name, completionHandler: completionHandler)
-            }else{
-                completionHandler(nil, err)
-            }
+            print(res);
+            completionHandler(err == nil ? res : nil, err != nil ? err : nil)
         })
     }
     static func NewUserInfo(email:String, name:String, completionHandler: @escaping (Any?, Error?) -> ()){

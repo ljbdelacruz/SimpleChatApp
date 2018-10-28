@@ -9,19 +9,21 @@
 import UIKit
 import SVProgressHUD
 
-class LoginViewController: UIViewController {
+class LoginViewController: TFAccessoryViewController {
 
     @IBOutlet weak var UIEmailTF: UITextField!
     @IBOutlet weak var UIPasswordTF: UITextField!
-    
+    var userInfo:UserInfo?;
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 //        print(FirebaseCustom.CreateID(db: DatabaseReference))
+        self.navigationController?.navigationBar.barTintColor=UIColor.red
         self.UIEmailTF.delegate=self;
         self.UIPasswordTF.delegate=self;
-        self.TFSetup();
+        self.UIEmailTF.inputAccessoryView=self.navbarAccessory;
+        self.UIPasswordTF.inputAccessoryView=self.navbarAccessory;
     }
     override func didReceiveMemoryWarning(){
         super.didReceiveMemoryWarning()
@@ -33,44 +35,31 @@ class LoginViewController: UIViewController {
         SVProgressHUD.show();
         FirebaseCustom.AuthUser(email: self.UIEmailTF.text!, password: UIPasswordTF.text!, completionHandler: {
             (res, error) in
-            if error != nil {
-                print("Success Auth")
+            if error == nil {
+                self.userInfo=UserInfo();
+                self.userInfo!.set(email: self.UIEmailTF.text!, pass: "", name: "");
+                self.performSegue(withIdentifier: "loginToDashboard", sender: nil);
             }else{
                 print(error?.localizedDescription);
             }
             SVProgressHUD.dismiss()
         })
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "loginToDashboard" {
+            let destVC=segue.destination as! DashboardViewController;
+            destVC.userInfo=self.userInfo;
+        }
+    }
+    
 }
-
-extension LoginViewController : UITextFieldDelegate{
+//MARK: -TextFieldFunctionalities
+extension LoginViewController{
     func textFieldDidBeginEditing(_ textField: UITextField) {
         (textField as! AdjustingTF).Move(view: self.view, duration: 0.3, moveDistance: 100, up: false)
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
         (textField as! AdjustingTF).Move(view: self.view, duration: 0.3, moveDistance: 0, up: false)
-    }
-}
-
-
-//MARK: -TF Setup
-extension LoginViewController{
-    func TFSetup(){
-        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
-        navBar.barStyle = UIBarStyle.blackTranslucent;
-        navBar.backgroundColor = UIColor.black;
-        navBar.alpha = 0.9;
-        //replace viewWidth with view controller width
-        let navItem = UINavigationItem()
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done
-            ,target: self, action: #selector(CloseKeyboard))
-        navItem.rightBarButtonItem = doneButton
-        navBar.pushItem(navItem, animated: false)
-        self.UIEmailTF.inputAccessoryView=navBar;
-        self.UIPasswordTF.inputAccessoryView=navBar;
-    }
-    @objc func CloseKeyboard(){
-        self.view.endEditing(true)
     }
 }
 

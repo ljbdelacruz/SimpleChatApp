@@ -16,10 +16,7 @@ class SignupViewController: UIViewController {
     @IBOutlet weak var UIEmail: UITextField!
     @IBOutlet weak var UIPassword: UITextField!
     @IBOutlet weak var UIRepassword: UITextField!
-    @IBOutlet weak var UIName: UITextField!
     var userInput:UserInfo=UserInfo();
-    
-    
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -46,7 +43,8 @@ class SignupViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "signupToDashboard" {
-            
+            let destVC=segue.destination as! DashboardViewController;
+            destVC.userInfo=self.userInput;
         }
     }
 }
