@@ -68,10 +68,6 @@ extension ChatRoomViewController:UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
-    func configureTable(){
-        self.UIMessageTV.rowHeight=UITableViewAutomaticDimension;
-        self.UIMessageTV.estimatedRowHeight=168;
-    }
 }
 
 //MARK: - Firebase func
@@ -80,7 +76,6 @@ extension ChatRoomViewController {
         Chat.all(rname: self.chatInfo!.name!, context: self.context!, completionHandler: {
             (res, err) in
             self.messages.append(res!)
-            self.configureTable()
             self.UIMessageTV.reloadData();
         })
     }

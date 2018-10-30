@@ -27,7 +27,7 @@ class Chat:NSManagedObject{
         })
     }
     static func setup(dict:[String:Any], context:NSManagedObjectContext)->Chat{
-        var temp=Chat(context: context);
+        let temp=Chat(context: context);
         temp.set(ia: (dict["isArchived"] as! Int) == 0 ? false:true, message: dict["message"] as! String, sender: dict["sender"] as! String);
         return temp;
     }
